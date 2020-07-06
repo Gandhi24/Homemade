@@ -1,0 +1,46 @@
+{% extends "header.html" %} {% block body %}
+
+<head>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+  <script type=text/javascript>
+    $(function() {
+      $('a#ingredient_input').bind('click', function() {
+      $.getJSON('/_background', {
+        ingredients_submit: $('input[name="ingredients_submit"]').val(),
+      }, function(data) {
+        var node = document.createTextNode(data.ingredient+'\n');
+        document.getElementById("ingr").appendChild(node);
+      });
+        return false;
+      });
+    });
+  </script>
+</head>
+
+<form action="/getrecipe/" method="POST">
+  <div class="col-lg-4">
+    <h3>Location</h3>
+    {% include "_countries.html" %}
+
+    <h3>Ingredients</h3>
+    <p>New ingredient must be on a new line</p>
+    <input style="width:60%" type="text" name="ingredients_submit">
+    <a href="#" id=ingredient_input><button style="width:39%" class="btn btn-default" type="button">Add ingredient</button></a>
+    <textarea id="ingr" name="ingredients" rows="8" style="width:100%" value="{{request.form.ingredients}}" required></textarea>
+  </div>
+
+  <div class="col-lg-offset-1 col-lg-6">
+    <h3>Title</h3>
+    <input type="text" name="title" style="width:90%" value="{{request.form.title}}" required>
+    <h3>Recipe</h3>
+    <textarea id='editor' name="recipe" rows="8" style="width:90%" value="{{request.form.recipe}}" required></textarea>
+  </div>
+
+  <div class="form-group">
+    <div class="col-lg-offset-2 col-lg-1">
+      <input class="btn btn-default" type="submit" Value="Search for dishes">
+    </div>
+  </div>
+</form>
+
+{% endblock %}
